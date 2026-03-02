@@ -1,9 +1,24 @@
+import MainLayout from "./layouts/MainLayout"
+import Home from "./pages/Home"
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+
+
 function App() {
+ return (
+   <MainLayout>
+     <Home />
+   </MainLayout>
+ );
+}
+
+export default App;
+
+
+function App2() {
   const [count, setCount] = useState(0)
 
   return (
@@ -32,4 +47,4 @@ function App() {
   )
 }
 
-export default App
+//export default App2
