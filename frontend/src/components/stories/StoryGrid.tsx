@@ -1,24 +1,44 @@
-import { getStories } from "../../services/storyService"
-import StoryCard from "./StoryCard"
+import { mockStories } from "../../data/mockStories"
 
-export default function StoryGrid(){
+export default function StoryGrid() {
 
- const stories = getStories()
+  const stories = mockStories.slice(1)
 
- return(
+  return (
+    <div
+      style={{
+        maxWidth: "1200px",
+        margin: "40px auto",
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gap: "20px"
+      }}
+    >
+      {stories.map((story) => (
+        <div
+          key={story.id}
+          style={{
+            border: "1px solid #eee",
+            borderRadius: "8px",
+            overflow: "hidden",
+            background: "white"
+          }}
+        >
+          <img
+            src={story.image}
+            alt={story.title}
+            style={{
+              width: "100%",
+              height: "180px",
+              objectFit: "cover"
+            }}
+          />
 
-   <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:"20px"}}>
-
-     {stories.map((story)=>(
-       <StoryCard
-         key={story.id}
-         title={story.title}
-         image={story.image}
-       />
-     ))}
-
-   </div>
-
- )
-
+          <div style={{ padding: "12px" }}>
+            <h3 style={{ fontSize: "16px" }}>{story.title}</h3>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 }
