@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import logo from "../../assets/nri-diary-logo.png"
 
 export default function Header() {
@@ -63,13 +64,19 @@ export default function Header() {
           }}
         >
 
-          <a href="#" style={navStyle}>Home</a>
-          <a href="#" style={navStyle}>India</a>
-          <a href="#" style={navStyle}>USA</a>
-          <a href="#" style={navStyle}>Business</a>
-          <a href="#" style={navStyle}>Technology</a>
-          <a href="#" style={navStyle}>Culture</a>
-          <a href="#" style={navStyle}>Opinions</a>
+          <Link to="/" style={navStyle}>Home</Link>
+
+          <Link to="/category/india" style={navStyle}>India</Link>
+
+          <Link to="/category/usa" style={navStyle}>USA</Link>
+
+          <Link to="/category/business" style={navStyle}>Business</Link>
+
+          <Link to="/category/technology" style={navStyle}>Technology</Link>
+
+          <Link to="/category/culture" style={navStyle}>Culture</Link>
+
+          <Link to="/category/opinions" style={navStyle}>Opinions</Link>
 
         </div>
 

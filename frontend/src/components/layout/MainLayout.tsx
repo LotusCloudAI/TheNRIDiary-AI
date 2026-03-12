@@ -1,33 +1,45 @@
+import React from "react"
 import Header from "./Header"
 import Footer from "./Footer"
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+type Props = {
+  children: React.ReactNode
+}
 
- return (
-   <div
-     style={{
-       display: "flex",
-       flexDirection: "column",
-       minHeight: "100vh"
-     }}
-   >
+export default function MainLayout({ children }: Props) {
 
-     <Header />
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        background: "#f5f5f5"
+      }}
+    >
 
-     <main
-       style={{
-         flex: 1,
-         maxWidth: "1200px",
-         margin: "0 auto",
-         padding: "40px 20px"
-       }}
-     >
-       {children}
-     </main>
+      {/* Header */}
 
-     <Footer />
+      <Header />
 
-   </div>
- )
+      {/* Main Content */}
 
+      <main
+        style={{
+          flex: 1,
+          width: "100%",
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "40px 20px"
+        }}
+      >
+        {children}
+      </main>
+
+      {/* Footer */}
+
+      <Footer />
+
+    </div>
+  )
 }
