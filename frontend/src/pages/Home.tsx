@@ -7,6 +7,7 @@ import BusinessSection from "../components/home/BusinessSection"
 import ClassifiedSection from "../components/home/ClassifiedSection"
 import EventsSection from "../components/home/EventsSection"
 import VideoSection from "../components/home/VideoSection"
+import AdvertisementBanner from "../components/ads/AdvertisementBanner"
 
 export default function Home() {
 
@@ -37,23 +38,30 @@ export default function Home() {
       </div>
 
 
+      {/* TOP ADVERTISEMENT */}
+
+      <section style={{ marginBottom: "50px" }}>
+        <AdvertisementBanner />
+      </section>
+
+
       {/* LATEST STORIES */}
 
-      <section style={{marginBottom:"50px"}}>
+      <section style={{ marginBottom: "50px" }}>
         <StoryGridSection />
       </section>
 
 
       {/* USA STATE NEWS */}
 
-      <section style={{marginBottom:"50px"}}>
+      <section style={{ marginBottom: "50px" }}>
         <StateNewsSection />
       </section>
 
 
       {/* COMMUNITY MODULES */}
 
-      <section style={{marginBottom:"50px"}}>
+      <section style={{ marginBottom: "50px" }}>
         <CommunitySection />
       </section>
 
@@ -62,10 +70,10 @@ export default function Home() {
 
       <section
         style={{
-          display:"grid",
-          gridTemplateColumns:"1fr 1fr",
-          gap:"40px",
-          marginBottom:"50px"
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "40px",
+          marginBottom: "50px"
         }}
       >
         <BusinessSection />
@@ -73,14 +81,21 @@ export default function Home() {
       </section>
 
 
+      {/* MID PAGE ADVERTISEMENT */}
+
+      <section style={{ marginBottom: "50px" }}>
+        <AdvertisementBanner />
+      </section>
+
+
       {/* EVENTS + VIDEOS */}
 
       <section
         style={{
-          display:"grid",
-          gridTemplateColumns:"1fr 1fr",
-          gap:"40px",
-          marginBottom:"50px"
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "40px",
+          marginBottom: "50px"
         }}
       >
         <EventsSection />
@@ -90,4 +105,5 @@ export default function Home() {
     </div>
 
   )
+
 }
