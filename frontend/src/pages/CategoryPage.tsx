@@ -1,23 +1,27 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useMemo } from 'react';
 import { mockStories } from "../data/mockStories";
 import { applyFilters } from "../modules/category/services/filterEngine";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function CategoryPage() {
-  const { name } = useParams<{ name: string }>();
-  const [searchParams] = useSearchParams();
-  const [stories, setStories] = useState(mockStories);
-  
-  useEffect(() => {
-    const stateFromUrl = searchParams.get('state') || '';
-    
-    const filtered = applyFilters(mockStories, { 
-      category: name,
-      state: stateFromUrl 
-    });
-    
-    setStories(filtered);
-  }, [name, searchParams]);
+  const [filters, setFilters] = useState({
+    category: '',
+    state: '',
+    city: ''
+  });
+
+  // Memoize filtered stories to prevent recalculation on every render
+  const filteredStories = useMemo(() => {
+    console.log('Calculating filtered stories...');
+    return applyFilters(mockStories, filters);
+  }, [filters.category, filters.state, filters.city]);
+
+  // Memoize available cities based on selected state
+  const availableCities = useMemo(() => {
+    if (!filters.state) return [];
+    return locations.USA[filters.state as keyof typeof locations.USA] || [];
+  }, [filters.state]);
+
 
   return (
     <div>
