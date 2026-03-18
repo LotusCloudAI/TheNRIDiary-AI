@@ -1,13 +1,11 @@
-import React from "react";
-import MainLayout from "./components/layout/MainLayout";
-import Home from "./pages/Home";
+import { BrowserRouter } from "react-router-dom"
+import MainLayout from "./components/layout/MainLayout"
+import AppRouter from "./router/AppRouter"
 
-const App: React.FC = () => {
-  return (
+export default function App() {
+ return (
     <MainLayout>
-      <Home />
-    </MainLayout>
-  );
-};
-
-export default App;
+     <AppRouter />
+   </MainLayout>
+ )
+}
