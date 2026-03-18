@@ -24,7 +24,6 @@ export default function Header() {
             The NRI Diary
           </Link>
           {isMobile && <div style={{fontSize: "12px", color: "gray"}}>Mobile View</div>}
-          {/* where to insert? Is here ok? */}
           <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
             <input
               type="text"
