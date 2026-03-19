@@ -1,21 +1,27 @@
-import { useState } from "react"
-import SearchBar from "../components/search/SearchBar"
-import SearchResultsGrid from "../components/search/SearchResultsGrid"
+import { useAppContext } from "../context/AppContext"
+import Typography from "../components/common/Typography"
+import Container from "../components/common/Container"
+import EmptyState from "../components/common/EmptyState"
 
-export default function SearchResults(){
+export default function SearchResults() {
+  const { searchQuery } = useAppContext()
 
- const [keyword,setKeyword] = useState("")
-
- return(
-
-  <div style={{maxWidth:"1200px",margin:"40px auto"}}>
-
-   <SearchBar/>
-
-   <SearchResultsGrid keyword={keyword}/>
-
-  </div>
-
- )
-
+  return (
+    <Container>
+      <Typography variant="h1">Search Results</Typography>
+      <Typography variant="body" color="textLight">
+        {searchQuery 
+          ? `Showing results for: "${searchQuery}"`
+          : "Enter a search term to find stories"
+        }
+      </Typography>
+      
+      {!searchQuery && (
+        <EmptyState
+          title="No search query"
+          message="Type something in the search bar to see results"
+        />
+      )}
+    </Container>
+  )
 }
