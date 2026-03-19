@@ -12,6 +12,7 @@ import SubmitBusinessPage from './pages/SubmitBusinessPage';
 import EventsPage from './pages/EventsPage';
 import CommunityPage from './pages/CommunityPage';
 import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Component imports
 import { Navigation } from './components/layout/Navigation';
