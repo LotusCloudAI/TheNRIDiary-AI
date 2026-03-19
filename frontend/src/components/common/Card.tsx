@@ -16,23 +16,25 @@ export default function Card({
   onClick,
   hoverable = false
 }: CardProps) {
+  const cardStyles = {
+    backgroundColor: "#ffffff",
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing[padding],
+    boxShadow: theme.shadows[shadow],
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    ...(hoverable && {
+      cursor: "pointer",
+      ":hover": {
+        transform: "translateY(-4px)",
+        boxShadow: theme.shadows.lg
+      }
+    })
+  }
+
   return (
     <div
       onClick={onClick}
-      style={{
-        backgroundColor: "#ffffff",
-        borderRadius: theme.borderRadius.md,
-        padding: theme.spacing[padding],
-        boxShadow: theme.shadows[shadow],
-        transition: hoverable ? "transform 0.2s ease, box-shadow 0.2s ease" : "none",
-        cursor: onClick ? "pointer" : "default",
-        ...(hoverable && {
-          ":hover": {
-            transform: "translateY(-2px)",
-            boxShadow: theme.shadows.lg
-          }
-        })
-      }}
+      style={cardStyles}
     >
       {children}
     </div>
