@@ -8,6 +8,9 @@ interface AppContextType {
   setSelectedCategory: (category: string) => void
   isSearchOpen: boolean
   setIsSearchOpen: (isOpen: boolean) => void
+  isMobileMenuOpen: boolean
+  setIsMobileMenuOpen: (isOpen: boolean) => void
+
 }
 
 const AppContext = createContext<AppContextType | null>(null)
@@ -16,6 +19,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("")
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
     <AppContext.Provider value={{
@@ -24,7 +28,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       selectedCategory,
       setSelectedCategory,
       isSearchOpen,
-      setIsSearchOpen
+      setIsSearchOpen,
+      isMobileMenuOpen,
+      setIsMobileMenuOpen
     }}>
       {children}
     </AppContext.Provider>
