@@ -1,4 +1,4 @@
-import {type Business, businesses } from '../../data/businesses';
+import {type Business, businesses } from '../../../data/businesses';
 
 interface BusinessFilters {
   category?: string;
