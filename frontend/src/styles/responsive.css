@@ -1,0 +1,117 @@
+css
+/* Base responsive styles */
+
+/* Mobile first approach */
+.container {
+  width: 100%;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+/* Small tablets and large phones */
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+  
+  /* Two column layouts */
+  .business-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Desktops */
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+  
+  /* Three column layouts */
+  .business-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Large desktops */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+/* Responsive filter panel */
+.filter-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .filter-panel {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .filter-panel select {
+    flex: 1 1 200px;
+  }
+}
+
+/* Mobile menu styles */
+@media (max-width: 767px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  .nav-menu.open {
+    display: block;
+  }
+  
+  /* Stack breadcrumbs on mobile */
+  .breadcrumb ol {
+    flex-wrap: wrap;
+  }
+  
+  /* Make cards full width on mobile */
+  .business-card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  /* Adjust font sizes for mobile */
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.5rem; }
+  
+  /* Make buttons touch-friendly */
+  button, .button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Increase form input sizes for touch */
+  input, select, textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px;
+  }
+}
