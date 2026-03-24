@@ -11,7 +11,7 @@ type Story = {
   location: string;
 };
 
-export default function CategoryPage() {
+export default function CategoryDetailPage() {
   const params = useParams();
   const searchParams = useSearchParams();
 
@@ -19,15 +19,19 @@ export default function CategoryPage() {
   const state = searchParams.get("state");
 
   const [stories, setStories] = useState<Story[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // 🔥 TEMP MOCK DATA (will replace with Firestore)
     const mockStories: Story[] = [
       { id: "1", title: "Story 1", category: "general", location: "TX" },
       { id: "2", title: "Story 2", category: "tech", location: "CA" },
       { id: "3", title: "Story 3", category: "general", location: "TX" },
     ];
+
     const filtered = filterStories(mockStories, category, state);
     setStories(filtered);
+    setLoading(false);
   }, [category, state]);
 
   return (
@@ -42,7 +46,9 @@ export default function CategoryPage() {
         </p>
       )}
 
-      {stories.length === 0 ? (
+      {loading ? (
+        <p>Loading...</p>
+      ) : stories.length === 0 ? (
         <p>No stories found</p>
       ) : (
         <div className="space-y-4">
