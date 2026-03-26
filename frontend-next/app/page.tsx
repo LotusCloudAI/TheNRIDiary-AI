@@ -1,21 +1,31 @@
 "use client";
 
-import HeroSection from "@/src/components/home/HeroSection";
-import TrendingSection from "@/src/components/home/TrendingSection";
-import StoryGridSection from "@/src/components/home/StoryGridSection";
-import CommunitySection from "@/src/components/home/CommunitySection";
-import BusinessSection from "@/src/components/home/BusinessSection";
+import { useEffect, useState } from "react";
+import { getStories } from "@/lib/api/stories";
 
-export default function Page() {
+export default function Home() {
+  const [stories, setStories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getStories().then((data) => {
+      setStories(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
   return (
-    <div className="space-y-10">
+    <div>
+      <h1>NRI Diary</h1>
 
-      <HeroSection />
-      <TrendingSection />
-      <StoryGridSection />
-      <CommunitySection />
-      <BusinessSection />
-
+      {stories.map((story) => (
+        <div key={story.id}>
+          <h2>{story.title}</h2>
+          <p>{story.content}</p>
+        </div>
+      ))}
     </div>
   );
 }
