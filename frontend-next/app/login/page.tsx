@@ -1,12 +1,30 @@
 "use client";
-import { signInWithGoogle } from "@/src/lib/firebase/auth";
 
 export default function LoginPage() {
   return (
-    <div className="max-w-md mx-auto py-20 text-center">
-      <h1 className="text-2xl font-bold mb-6">Login</h1>
-      <button onClick={signInWithGoogle}>
-        Continue with Google
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "0 auto",
+        padding: "60px 20px",
+        textAlign: "center",
+      }}
+    >
+      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>
+        Login
+      </h1>
+
+      <button
+        style={{
+          padding: "10px 20px",
+          background: "#000",
+          color: "#fff",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        Continue with Google (Coming Soon)
       </button>
     </div>
   );
