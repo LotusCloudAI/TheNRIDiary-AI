@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 
-import "@/src/index.css"; // ✅ your Vite styles
-import "./globals.css";  // ✅ Next styles
+import "@/src/index.css";
+import "./globals.css";
 
-import MainLayout from "@/src/components/layout/MainLayout";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Header from "@/src/components/layout/Header";
+import Footer from "@/src/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "The NRI Diary",
@@ -27,14 +17,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <MainLayout>
+    <html lang="en">
+      <body
+        style={{
+          margin: 0,
+          backgroundColor: "#f5f7fa",
+          color: "#111",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
+        {/* HEADER */}
+        <Header />
+
+        {/* CONTENT */}
+        <div style={{ padding: "20px" }}>
           {children}
-        </MainLayout>
+        </div>
+        {/* FOOTER */}
+        <Footer />
       </body>
     </html>
   );
