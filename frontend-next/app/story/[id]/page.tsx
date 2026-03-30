@@ -22,30 +22,36 @@ export default function StoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      setLoading(false);
+      return;
+    }
 
     const fetchStory = async () => {
       try {
-        // ✅ IMPORTANT: collection name must match homepage
+        console.log("Fetching story ID:", id); // DEBUG
+
         const ref = doc(db, "articles", id);
         const snap = await getDoc(ref);
 
         if (snap.exists()) {
           const data = snap.data();
 
-          setStory({
+          const formattedStory: Story = {
             id: snap.id,
-            title: data.title || "No Title",
-            content: data.content || "No content available",
-            category: data.category || "General",
+            title: data?.title ?? "No Title",
+            content: data?.content ?? "No content available",
+            category: data?.category ?? "General",
             image:
-              data.img ||
-              data.image ||
+              data?.image ??
+              data?.img ??
               "https://placehold.co/600x400",
-            createdAt: data.createdAt || null,
-          });
+            createdAt: data?.createdAt ?? null,
+          };
+
+          setStory(formattedStory);
         } else {
-          console.error("Story not found");
+          console.warn("Story not found in Firestore for ID:", id);
           setStory(null);
         }
       } catch (error) {
@@ -59,24 +65,28 @@ export default function StoryPage() {
     fetchStory();
   }, [id]);
 
-  // Loading State
+  // 🔄 Loading State
   if (loading) {
     return (
-      <div style={{ padding: "30px", textAlign: "center" }}>
+      <div style={{ padding: "40px", textAlign: "center" }}>
         <p style={{ fontSize: "18px" }}>Loading story...</p>
       </div>
     );
   }
 
-  // ✅ Not Found State
+  // ❌ Not Found State
   if (!story) {
     return (
-      <div style={{ padding: "30px", textAlign: "center" }}>
-        <p style={{ fontSize: "18px" }}>Story not found.</p>
+      <div style={{ padding: "40px", textAlign: "center" }}>
+        <h2 style={{ marginBottom: "10px" }}>Story not found</h2>
+        <p style={{ color: "#666" }}>
+          The requested story does not exist or may have been removed.
+        </p>
       </div>
     );
   }
 
+  // ✅ SUCCESS UI
   return (
     <div
       style={{
@@ -90,7 +100,7 @@ export default function StoryPage() {
           maxWidth: "900px",
           margin: "0 auto",
           backgroundColor: "#ffffff",
-          padding: "20px",
+          padding: "25px",
           borderRadius: "10px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
         }}
@@ -118,7 +128,7 @@ export default function StoryPage() {
 
         {/* Image */}
         <img
-          src={story.image || "https://placehold.co/600x400"}
+          src={story.image}
           alt={story.title}
           style={{
             width: "100%",
