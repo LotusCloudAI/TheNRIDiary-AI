@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { getStories } from "@/lib/api/stories";
 
 import HeroSection from "@/components/home/HeroSection";
-import CategoryNav from "@/components/home/CategoryNav";
 import TrendingSection from "@/components/home/TrendingSection";
+import CategoryNav from "@/components/home/CategoryNav";
 import StoryCard from "@/components/home/StoryCard";
 
 type Story = {
@@ -26,7 +26,7 @@ export default function Page() {
         const data = await getStories();
         setStories(data || []);
       } catch (error) {
-        console.error("Error fetching stories:", error);
+        console.error("Error loading stories:", error);
         setStories([]);
       } finally {
         setLoading(false);
@@ -37,7 +37,7 @@ export default function Page() {
   }, []);
 
   // =========================
-  // LOADING
+  // LOADING STATE
   // =========================
   if (loading) {
     return (
@@ -48,7 +48,7 @@ export default function Page() {
   }
 
   // =========================
-  // EMPTY
+  // EMPTY STATE
   // =========================
   if (!stories || stories.length === 0) {
     return (
@@ -63,35 +63,29 @@ export default function Page() {
       <div style={styles.container}>
 
         {/* HERO */}
-        <section style={styles.heroSection}>
+        <div style={styles.section}>
           <HeroSection story={stories[0]} />
-        </section>
+        </div>
 
         {/* CATEGORY NAV */}
-        <section style={styles.navSection}>
+        <div style={styles.section}>
           <CategoryNav />
-        </section>
+        </div>
 
-        {/* MAIN LAYOUT */}
-        <section style={styles.mainLayout}>
+        {/* TRENDING */}
+        <div style={styles.trendingWrapper}>
+          <TrendingSection stories={stories} />
+        </div>
 
-          {/* LEFT: STORIES */}
-          <div style={styles.leftColumn}>
-            <h2 style={styles.sectionTitle}>Latest Stories</h2>
+        {/* TITLE */}
+        <h2 style={styles.sectionTitle}>Latest Stories</h2>
 
-            <div style={styles.grid}>
-              {stories.slice(1).map((story) => (
-                <StoryCard key={story.id} story={story} />
-              ))}
-            </div>
-          </div>
-
-          {/* RIGHT: TRENDING SIDEBAR */}
-          <aside style={styles.sidebar}>
-            <TrendingSection stories={stories} />
-          </aside>
-
-        </section>
+        {/* GRID */}
+        <div style={styles.grid}>
+          {stories.slice(1).map((story) => (
+            <StoryCard key={story.id} story={story} />
+          ))}
+        </div>
 
       </div>
     </div>
@@ -99,7 +93,7 @@ export default function Page() {
 }
 
 // =========================
-// STYLES (PREMIUM SYSTEM)
+// STYLES (CLEAN + RESPONSIVE)
 // =========================
 
 const styles: any = {
@@ -114,6 +108,18 @@ const styles: any = {
     margin: "0 auto",
   },
 
+  section: {
+    marginBottom: "20px",
+  },
+
+  trendingWrapper: {
+    marginBottom: "25px",
+    padding: "16px",
+    backgroundColor: "#ffffff",
+    borderRadius: "14px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+  },
+
   center: {
     padding: "80px 20px",
     textAlign: "center",
@@ -124,34 +130,11 @@ const styles: any = {
     color: "#666",
   },
 
-  heroSection: {
-    marginBottom: "24px",
-  },
-
-  navSection: {
-    marginBottom: "20px",
-  },
-
-  mainLayout: {
-    display: "grid",
-    gridTemplateColumns: "3fr 1fr", // ✅ main + sidebar
-    gap: "24px",
-  },
-
-  leftColumn: {},
-
-  sidebar: {
-    backgroundColor: "#ffffff",
-    borderRadius: "12px",
-    padding: "16px",
-    height: "fit-content",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-  },
-
   sectionTitle: {
-    fontSize: "20px",
+    fontSize: "22px",
     fontWeight: "600",
-    marginBottom: "14px",
+    marginTop: "10px",
+    marginBottom: "15px",
     color: "#111",
   },
 
