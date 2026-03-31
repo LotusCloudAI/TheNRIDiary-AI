@@ -1,28 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+
 import SearchBar from "@/src/components/search/SearchBar";
 import SearchResultsGrid from "@/src/components/search/SearchResultsGrid";
 
 export default function SearchPage() {
-  const [keyword, setKeyword] = useState("");
+  const searchParams = useSearchParams();
+
+  //  Get query from URL (Header search support)
+  const initialQuery = searchParams.get("q") || "";
+
+  const [keyword, setKeyword] = useState(initialQuery);
+
+  // Sync when URL changes
+  useEffect(() => {
+    setKeyword(initialQuery);
+  }, [initialQuery]);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
-
-      {/* Title */}
-      <h1 className="text-3xl font-bold mb-6">
+    <div
+      style={{
+        maxWidth: "1100px",
+        margin: "0 auto",
+        padding: "30px 20px",
+        backgroundColor: "#f5f7fa",
+        minHeight: "100vh",
+      }}
+    >
+      {/* TITLE */}
+      <h1
+        style={{
+          fontSize: "28px",
+          fontWeight: "bold",
+          marginBottom: "25px",
+          color: "#111",
+        }}
+      >
         Search NRI News
       </h1>
 
-      {/* Search Bar */}
-      <div className="mb-8">
+      {/* SEARCH BAR */}
+      <div style={{ marginBottom: "30px" }}>
         <SearchBar onSearch={setKeyword} />
       </div>
 
-      {/* Results */}
-      <SearchResultsGrid keyword={keyword} />
-
+      {/* RESULTS */}
+      {keyword ? (
+        <SearchResultsGrid keyword={keyword} />
+      ) : (
+        <p style={{ color: "#666", fontSize: "14px" }}>
+          Start typing to search stories...
+        </p>
+      )}
     </div>
   );
 }
