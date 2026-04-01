@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-
-import "@/src/index.css";
 import "./globals.css";
 
-import Header from "@/src/components/layout/Header";
-import Footer from "@/src/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "The NRI Diary",
@@ -18,24 +16,50 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        style={{
-          margin: 0,
-          backgroundColor: "#f5f7fa",
-          color: "#111",
-          fontFamily: "Arial, sans-serif",
-        }}
-      >
+      <head>
+        {/* MOBILE RESPONSIVE FIX */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+
+      <body style={styles.body}>
         {/* HEADER */}
         <Header />
 
-        {/* CONTENT */}
-        <div style={{ padding: "20px" }}>
-          {children}
-        </div>
+        {/* MAIN CONTENT */}
+        <main style={styles.main}>{children}</main>
+
         {/* FOOTER */}
         <Footer />
       </body>
     </html>
   );
 }
+
+// =========================
+// STYLES (PRODUCTION READY)
+// =========================
+
+const styles: {
+  body: React.CSSProperties;
+  main: React.CSSProperties;
+} = {
+  body: {
+    margin: 0,
+    backgroundColor: "#f5f7fa",
+    color: "#111",
+    fontFamily:
+      "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100vh",
+  },
+
+  main: {
+    flex: 1,
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "15px",
+    boxSizing: "border-box",
+  },
+};

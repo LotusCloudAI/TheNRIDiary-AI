@@ -3,7 +3,7 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 type Story = {
   id: string;
@@ -16,6 +16,7 @@ type Story = {
 
 export default function StoryPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params?.id as string;
 
   const [story, setStory] = useState<Story | null>(null);
@@ -29,13 +30,11 @@ export default function StoryPage() {
 
     const fetchStory = async () => {
       try {
-        console.log("Fetching story ID:", id); // DEBUG
-
         const ref = doc(db, "articles", id);
         const snap = await getDoc(ref);
 
         if (snap.exists()) {
-          const data = snap.data();
+          const data = snap.data() as any;
 
           const formattedStory: Story = {
             id: snap.id,
@@ -43,15 +42,14 @@ export default function StoryPage() {
             content: data?.content ?? "No content available",
             category: data?.category ?? "General",
             image:
-              data?.image ??
-              data?.img ??
-              "https://placehold.co/600x400",
+              data?.img ||
+              data?.image ||
+              "/default-news.jpg",
             createdAt: data?.createdAt ?? null,
           };
 
           setStory(formattedStory);
         } else {
-          console.warn("Story not found in Firestore for ID:", id);
           setStory(null);
         }
       } catch (error) {
@@ -65,95 +63,131 @@ export default function StoryPage() {
     fetchStory();
   }, [id]);
 
-  // 🔄 Loading State
+  // =========================
+  // LOADING
+  // =========================
   if (loading) {
     return (
-      <div style={{ padding: "40px", textAlign: "center" }}>
-        <p style={{ fontSize: "18px" }}>Loading story...</p>
+      <div style={styles.center}>
+        <p style={styles.text}>Loading article...</p>
       </div>
     );
   }
 
-  // ❌ Not Found State
+  // =========================
+  // NOT FOUND
+  // =========================
   if (!story) {
     return (
-      <div style={{ padding: "40px", textAlign: "center" }}>
-        <h2 style={{ marginBottom: "10px" }}>Story not found</h2>
-        <p style={{ color: "#666" }}>
-          The requested story does not exist or may have been removed.
-        </p>
+      <div style={styles.center}>
+        <p style={styles.text}>Story not found</p>
+
+        <button style={styles.backBtn} onClick={() => router.push("/")}>
+          Go Back Home
+        </button>
       </div>
     );
   }
 
-  // ✅ SUCCESS UI
   return (
-    <div
-      style={{
-        padding: "30px",
-        backgroundColor: "#f5f7fa",
-        minHeight: "100vh",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "900px",
-          margin: "0 auto",
-          backgroundColor: "#ffffff",
-          padding: "25px",
-          borderRadius: "10px",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-        }}
-      >
-        {/* Title */}
-        <h1
-          style={{
-            fontSize: "30px",
-            marginBottom: "10px",
-            color: "#111",
-          }}
-        >
-          {story.title}
-        </h1>
+    <div style={styles.page}>
+      <div style={styles.container}>
 
-        {/* Category */}
-        <p
-          style={{
-            color: "#888",
-            marginBottom: "15px",
-          }}
-        >
-          {story.category}
-        </p>
+        {/* BACK BUTTON */}
+        <button style={styles.backBtn} onClick={() => router.back()}>
+          ← Back
+        </button>
 
-        {/* Image */}
+        {/* IMAGE */}
         <img
           src={story.image}
           alt={story.title}
-          style={{
-            width: "100%",
-            height: "350px",
-            objectFit: "cover",
-            borderRadius: "10px",
-            marginBottom: "20px",
-          }}
+          style={styles.image}
           onError={(e) => {
             (e.currentTarget as HTMLImageElement).src =
-              "https://placehold.co/600x400";
+              "/default-news.jpg";
           }}
         />
 
-        {/* Content */}
-        <p
-          style={{
-            fontSize: "16px",
-            lineHeight: "1.7",
-            color: "#333",
-          }}
-        >
+        {/* CATEGORY */}
+        <p style={styles.category}>
+          {story.category}
+        </p>
+
+        {/* TITLE */}
+        <h1 style={styles.title}>
+          {story.title}
+        </h1>
+
+        {/* CONTENT */}
+        <p style={styles.content}>
           {story.content}
         </p>
+
       </div>
     </div>
   );
 }
+
+// =========================
+// STYLES
+// =========================
+
+const styles: any = {
+  page: {
+    backgroundColor: "#f5f7fa",
+    minHeight: "100vh",
+    padding: "30px 20px",
+  },
+  container: {
+    maxWidth: "800px",
+    margin: "0 auto",
+    background: "#ffffff",
+    padding: "25px",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+  },
+  center: {
+    padding: "80px",
+    textAlign: "center",
+  },
+  text: {
+    fontSize: "18px",
+    color: "#555",
+    marginBottom: "20px",
+  },
+  backBtn: {
+    padding: "8px 14px",
+    borderRadius: "6px",
+    border: "none",
+    background: "#111",
+    color: "#fff",
+    cursor: "pointer",
+    marginBottom: "20px",
+  },
+  image: {
+    width: "100%",
+    height: "320px",
+    objectFit: "cover",
+    borderRadius: "10px",
+    marginBottom: "20px",
+  },
+  category: {
+    fontSize: "12px",
+    color: "#888",
+    marginBottom: "10px",
+    textTransform: "capitalize",
+  },
+  title: {
+    fontSize: "28px",
+    fontWeight: "600",
+    marginBottom: "15px",
+    color: "#111",
+  },
+  content: {
+    fontSize: "16px",
+    lineHeight: "1.8",
+    color: "#333",
+    whiteSpace: "pre-line",
+  },
+};

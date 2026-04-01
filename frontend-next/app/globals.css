@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+/* RESET */
+* {
+  box-sizing: border-box;
+}
+
+/* BODY BASE STYLE */
+body {
+  margin: 0;
+  padding: 0;
+  background: #f8fafc;   /* light clean background */
+  color: #111827;        /* dark readable text */
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* LINKS */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* IMAGES */
+img {
+  max-width: 100%;
+  display: block;
+}
