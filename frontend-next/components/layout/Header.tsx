@@ -13,22 +13,22 @@ export default function Header() {
     if (!keyword.trim()) return;
 
     router.push(`/search?q=${encodeURIComponent(keyword)}`);
-    setKeyword(""); // ✅ clear after search
+    setKeyword("");
   };
 
   return (
     <header style={styles.header}>
       <div style={styles.container}>
 
-        {/* LOGO */}
-        <h1
-          style={styles.logo}
+        {/* ✅ LOGO IMAGE */}
+        <img
+          src="/nri-diary-logo.png"
+          alt="The NRI Diary"
           onClick={() => router.push("/")}
-        >
-          The NRI Diary
-        </h1>
+          style={styles.logoImage}
+        />
 
-        {/* SEARCH */}
+        {/* ✅ SEARCH */}
         <form onSubmit={handleSearch} style={styles.searchBox}>
           <input
             type="text"
@@ -45,7 +45,7 @@ export default function Header() {
 }
 
 // =========================
-// STYLES (RESPONSIVE)
+// STYLES (PRODUCTION READY)
 // =========================
 
 const styles: any = {
@@ -68,19 +68,20 @@ const styles: any = {
     justifyContent: "space-between",
     gap: "12px",
 
-    flexWrap: "wrap", // ✅ mobile wrap support
+    flexWrap: "wrap", // mobile support
   },
 
-  logo: {
-    fontSize: "20px",
-    fontWeight: "700",
+  // ✅ LOGO STYLE (UPDATED)
+  logoImage: {
+    height: "36px",
     cursor: "pointer",
-    whiteSpace: "nowrap",
+    objectFit: "contain",
+    flexShrink: 0,
   },
 
   searchBox: {
     flex: 1,
-    minWidth: "180px", // ✅ prevents shrink issue
+    minWidth: "180px",
     maxWidth: "420px",
   },
 
@@ -91,7 +92,6 @@ const styles: any = {
     border: "1px solid #ddd",
     fontSize: "14px",
     outline: "none",
-
     backgroundColor: "#fafafa",
   },
 };
