@@ -17,18 +17,9 @@ export default function StoryCard({ story }: { story: Story }) {
     <div
       onClick={() => router.push(`/story/${story.id}`)}
       style={styles.card}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-6px)";
-        const img = e.currentTarget.querySelector("img");
-        if (img) (img as HTMLImageElement).style.transform = "scale(1.05)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-        const img = e.currentTarget.querySelector("img");
-        if (img) (img as HTMLImageElement).style.transform = "scale(1)";
-      }}
+      className="story-card"
     >
-      {/* IMAGE WRAPPER */}
+      {/* IMAGE */}
       <div style={styles.imageWrapper}>
         <img
           src={story.image || "/default-news.jpg"}
@@ -40,10 +31,13 @@ export default function StoryCard({ story }: { story: Story }) {
           }}
         />
 
+        {/* GRADIENT OVERLAY */}
+        <div style={styles.overlay} />
+
         {/* CATEGORY BADGE */}
-        <div style={styles.badge}>
-          {story.category || "General"}
-        </div>
+        <span style={styles.badge}>
+          {(story.category || "general").toUpperCase()}
+        </span>
       </div>
 
       {/* CONTENT */}
@@ -59,10 +53,6 @@ export default function StoryCard({ story }: { story: Story }) {
         </p>
 
         <div style={styles.footer}>
-          <span style={styles.categoryText}>
-            {story.category || "General"}
-          </span>
-
           <span style={styles.readMore}>Read →</span>
         </div>
       </div>
@@ -81,7 +71,7 @@ const styles: any = {
     backgroundColor: "#ffffff",
     boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
     cursor: "pointer",
-    transition: "all 0.25s ease",
+    transition: "transform 0.25s ease, box-shadow 0.25s ease",
   },
 
   imageWrapper: {
@@ -91,9 +81,16 @@ const styles: any = {
 
   image: {
     width: "100%",
-    height: "180px",
+    height: "clamp(160px, 30vw, 200px)", // ✅ responsive
     objectFit: "cover",
-    transition: "transform 0.3s ease",
+    transition: "transform 0.35s ease",
+  },
+
+  overlay: {
+    position: "absolute",
+    inset: 0,
+    background:
+      "linear-gradient(to top, rgba(0,0,0,0.4), transparent 60%)",
   },
 
   badge: {
@@ -102,11 +99,12 @@ const styles: any = {
     left: "10px",
     background: "#ffffff",
     color: "#111",
-    fontSize: "11px",
+    fontSize: "10px",
     padding: "4px 10px",
     borderRadius: "20px",
-    fontWeight: "500",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    fontWeight: "600",
+    letterSpacing: "0.5px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
   },
 
   content: {
@@ -129,15 +127,10 @@ const styles: any = {
   },
 
   footer: {
-    marginTop: "12px",
+    marginTop: "10px",
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
-  },
-
-  categoryText: {
-    fontSize: "12px",
-    color: "#888",
   },
 
   readMore: {

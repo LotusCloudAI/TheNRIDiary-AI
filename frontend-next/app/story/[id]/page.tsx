@@ -36,19 +36,19 @@ export default function StoryPage() {
         if (snap.exists()) {
           const data = snap.data() as any;
 
-          const formattedStory: Story = {
+          setStory({
             id: snap.id,
             title: data?.title ?? "No Title",
             content: data?.content ?? "No content available",
-            category: data?.category ?? "General",
+            category: (data?.category ?? "general")
+              .toLowerCase()
+              .trim(),
             image:
               data?.img ||
               data?.image ||
               "/default-news.jpg",
             createdAt: data?.createdAt ?? null,
-          };
-
-          setStory(formattedStory);
+          });
         } else {
           setStory(null);
         }
@@ -93,10 +93,20 @@ export default function StoryPage() {
     <div style={styles.page}>
       <div style={styles.container}>
 
-        {/* BACK BUTTON */}
+        {/* BACK */}
         <button style={styles.backBtn} onClick={() => router.back()}>
           ← Back
         </button>
+
+        {/* CATEGORY BADGE */}
+        <div style={styles.badge}>
+          {story.category}
+        </div>
+
+        {/* TITLE */}
+        <h1 style={styles.title}>
+          {story.title}
+        </h1>
 
         {/* IMAGE */}
         <img
@@ -109,20 +119,10 @@ export default function StoryPage() {
           }}
         />
 
-        {/* CATEGORY */}
-        <p style={styles.category}>
-          {story.category}
-        </p>
-
-        {/* TITLE */}
-        <h1 style={styles.title}>
-          {story.title}
-        </h1>
-
         {/* CONTENT */}
-        <p style={styles.content}>
+        <div style={styles.content}>
           {story.content}
-        </p>
+        </div>
 
       </div>
     </div>
@@ -130,60 +130,73 @@ export default function StoryPage() {
 }
 
 // =========================
-// STYLES
+// STYLES (PREMIUM)
 // =========================
 
 const styles: any = {
   page: {
     backgroundColor: "#f5f7fa",
     minHeight: "100vh",
-    padding: "30px 20px",
+    padding: "20px 12px",
   },
+
   container: {
-    maxWidth: "800px",
+    maxWidth: "820px",
     margin: "0 auto",
     background: "#ffffff",
-    padding: "25px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+    padding: "20px",
+    borderRadius: "14px",
+    boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
   },
+
   center: {
-    padding: "80px",
+    padding: "80px 20px",
     textAlign: "center",
   },
+
   text: {
-    fontSize: "18px",
-    color: "#555",
+    fontSize: "16px",
+    color: "#666",
     marginBottom: "20px",
   },
+
   backBtn: {
-    padding: "8px 14px",
+    padding: "6px 12px",
     borderRadius: "6px",
-    border: "none",
-    background: "#111",
-    color: "#fff",
+    border: "1px solid #ddd",
+    background: "#fff",
     cursor: "pointer",
-    marginBottom: "20px",
+    marginBottom: "15px",
   },
-  image: {
-    width: "100%",
-    height: "320px",
-    objectFit: "cover",
-    borderRadius: "10px",
-    marginBottom: "20px",
-  },
-  category: {
-    fontSize: "12px",
-    color: "#888",
+
+  badge: {
+    display: "inline-block",
+    fontSize: "11px",
+    padding: "4px 10px",
+    background: "#eef2ff",
+    color: "#3730a3",
+    borderRadius: "20px",
+    fontWeight: "500",
     marginBottom: "10px",
     textTransform: "capitalize",
   },
+
   title: {
-    fontSize: "28px",
+    fontSize: "26px",
     fontWeight: "600",
     marginBottom: "15px",
     color: "#111",
+    lineHeight: "1.3",
   },
+
+  image: {
+    width: "100%",
+    height: "clamp(220px, 40vw, 420px)", // ✅ responsive fix
+    objectFit: "cover",
+    borderRadius: "10px",
+    marginBottom: "18px",
+  },
+
   content: {
     fontSize: "16px",
     lineHeight: "1.8",
