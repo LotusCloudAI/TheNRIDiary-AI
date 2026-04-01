@@ -4,7 +4,6 @@ import {
   getDocs,
   query,
   orderBy,
-  where,
   limit,
   startAfter,
   QueryDocumentSnapshot,
@@ -25,7 +24,7 @@ export type Story = {
 };
 
 // ==============================
-// SAFE DATA PARSER (PRODUCTION SAFE)
+// SAFE DATA PARSER (CRITICAL)
 // ==============================
 
 function parseStory(
@@ -39,38 +38,25 @@ function parseStory(
     id: doc.id,
     title: data?.title ?? "No Title",
     content: data?.content ?? "",
-    category: (data?.category ?? "general").toLowerCase(), // ✅ normalize
+    category: (data?.category ?? "general")
+      .toLowerCase()
+      .trim(), // ✅ normalize (FIX)
     image: data?.img ?? data?.image ?? "/default-news.jpg",
     createdAt: data?.createdAt ?? null,
   };
 }
 
 // ==============================
-// GET STORIES (ALL / CATEGORY)
+// GET STORIES (ALWAYS ALL - FIXED)
 // ==============================
 
-export async function getStories(
-  category: string = "all"
-): Promise<Story[]> {
+export async function getStories(): Promise<Story[]> {
   try {
-    const normalizedCategory = category?.toLowerCase();
-
-    let q;
-
-    if (normalizedCategory && normalizedCategory !== "all") {
-      q = query(
-        collection(db, "articles"),
-        where("category", "==", normalizedCategory),
-        orderBy("createdAt", "desc"),
-        limit(50)
-      );
-    } else {
-      q = query(
-        collection(db, "articles"),
-        orderBy("createdAt", "desc"),
-        limit(50)
-      );
-    }
+    const q = query(
+      collection(db, "articles"),
+      orderBy("createdAt", "desc"),
+      limit(50)
+    );
 
     const snapshot = await getDocs(q);
 
@@ -82,7 +68,7 @@ export async function getStories(
 }
 
 // ==============================
-// RELATED STORIES (🔥 NEW - PRODUCTION)
+// RELATED STORIES (SAFE FILTER)
 // ==============================
 
 export async function getRelatedStories(
@@ -92,16 +78,21 @@ export async function getRelatedStories(
   try {
     const q = query(
       collection(db, "articles"),
-      where("category", "==", category.toLowerCase()),
       orderBy("createdAt", "desc"),
-      limit(6)
+      limit(50)
     );
 
     const snapshot = await getDocs(q);
 
+    const normalizedCategory = category.toLowerCase().trim();
+
     return snapshot.docs
       .map(parseStory)
-      .filter((story) => story.id !== currentId)
+      .filter(
+        (story) =>
+          story.category === normalizedCategory &&
+          story.id !== currentId
+      )
       .slice(0, 4);
   } catch (error) {
     console.error("Related stories error:", error);

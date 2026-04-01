@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getStories } from "@/lib/api/stories";
 
@@ -17,6 +17,8 @@ type Story = {
 
 export default function CategoryDetailPage() {
   const params = useParams();
+  const router = useRouter();
+
   const category = (params?.category as string)?.toLowerCase() || "all";
 
   const [stories, setStories] = useState<Story[]>([]);
@@ -25,9 +27,24 @@ export default function CategoryDetailPage() {
   useEffect(() => {
     const fetchCategoryStories = async () => {
       try {
-        // ✅ DIRECT FIRESTORE FILTER (NO LOCAL FILTER)
-        const data = await getStories(category);
-        setStories(data || []);
+        // ✅ Fetch ALL stories (NO Firestore filter)
+        const data = await getStories();
+
+        // ✅ SAFE FILTER (handles case + spaces)
+        const filtered =
+          category === "all"
+            ? data
+            : data.filter((story: Story) => {
+                const storyCategory = (story.category || "")
+                  .toLowerCase()
+                  .trim();
+
+                const urlCategory = category.toLowerCase().trim();
+
+                return storyCategory === urlCategory;
+              });
+
+        setStories(filtered || []);
       } catch (error) {
         console.error("Category fetch error:", error);
         setStories([]);
@@ -56,6 +73,10 @@ export default function CategoryDetailPage() {
   if (!stories || stories.length === 0) {
     return (
       <div style={styles.center}>
+        <button onClick={() => router.back()} style={styles.backBtn}>
+          ← Back
+        </button>
+
         <p style={styles.text}>
           No stories found for "{formatCategory(category)}"
         </p>
@@ -67,6 +88,11 @@ export default function CategoryDetailPage() {
     <div style={styles.page}>
       <div style={styles.container}>
 
+        {/* BACK BUTTON */}
+        <button onClick={() => router.back()} style={styles.backBtn}>
+          ← Back
+        </button>
+
         {/* CATEGORY NAV */}
         <CategoryNav />
 
@@ -75,7 +101,7 @@ export default function CategoryDetailPage() {
           {formatCategory(category)}
         </h1>
 
-        {/* GRID USING REUSABLE CARD */}
+        {/* GRID */}
         <div style={styles.grid}>
           {stories.map((story) => (
             <StoryCard key={story.id} story={story} />
@@ -96,35 +122,50 @@ function formatCategory(cat: string) {
 }
 
 // =========================
-// STYLES
+// STYLES (PRODUCTION READY)
 // =========================
 
 const styles: any = {
   page: {
     backgroundColor: "#f5f7fa",
     minHeight: "100vh",
-    padding: "30px 20px",
+    padding: "20px 12px",
   },
+
   container: {
     maxWidth: "1200px",
     margin: "0 auto",
   },
+
   title: {
-    fontSize: "24px",
+    fontSize: "22px",
     fontWeight: "600",
-    marginBottom: "20px",
+    marginBottom: "15px",
+    color: "#111",
   },
+
   grid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-    gap: "20px",
+    gap: "18px",
   },
+
   center: {
-    padding: "80px",
+    padding: "60px 20px",
     textAlign: "center",
   },
+
   text: {
-    fontSize: "18px",
-    color: "#555",
+    fontSize: "16px",
+    color: "#666",
+  },
+
+  backBtn: {
+    marginBottom: "15px",
+    padding: "6px 12px",
+    border: "1px solid #ddd",
+    borderRadius: "6px",
+    background: "#fff",
+    cursor: "pointer",
   },
 };
