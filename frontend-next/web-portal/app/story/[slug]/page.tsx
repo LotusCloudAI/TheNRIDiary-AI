@@ -1,16 +1,20 @@
 import { fetchStories } from "@/shared/api/stories";
+import StoryCard from "@/components/shared/StoryCard";
 
-export default async function StoryPage({ params }) {
+export default async function CategoryPage({ params }) {
   const stories = await fetchStories();
 
-  const story = stories.find(s => s.slug === params.slug);
-
-  if (!story) return <div>Not found</div>;
+  const filtered = stories.filter(
+    (s) =>
+      s.category?.toLowerCase() ===
+      params.category.toLowerCase()
+  );
 
   return (
     <div className="p-6">
-      <h1>{story.title}</h1>
-      <p>{story.content}</p>
+      {filtered.map((story) => (
+        <StoryCard key={story.id} story={story} />
+      ))}
     </div>
   );
 }
